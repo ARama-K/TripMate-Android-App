@@ -4,55 +4,54 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.util.Patterns
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.travelapp.User1.Use
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : AppCompatActivity() {
-    lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_login)
-        initFirebaseAuth()
+
+        db = FirebaseFirestore.getInstance()
 
         val emailEditText = findViewById<TextInputEditText>(R.id.emailEditText)
         val passwordEditText = findViewById<TextInputEditText>(R.id.passwordEditText)
         val registerButton = findViewById<MaterialButton>(R.id.signupButton)
+        val loginButton = findViewById<Button>(R.id.signinButton)
 
         registerButton.setOnClickListener {
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
-        val loginButton = findViewById<Button>(R.id.signinButton)
+
         loginButton.setOnClickListener {
-            val txtEmail = emailEditText.text.toString()
+            val txtEmail = emailEditText.text.toString().trim()
             val txtPwd = passwordEditText.text.toString()
+
             when {
                 TextUtils.isEmpty(txtEmail) || TextUtils.isEmpty(txtPwd) -> {
-                    val msg = "Empty Username or Password"
-                    toastMsg(msg)
+                    toastMsg("Empty Username or Password")
                     setValidationFlag("EmptyUsernameOrPassword")
                 }
                 txtPwd.length < 6 -> {
-                    val msg = "Password must be at least 6 characters."
-                    toastMsg(msg)
+                    toastMsg("Password must be at least 6 characters.")
                     setValidationFlag("PasswordTooShort")
                 }
                 !Patterns.EMAIL_ADDRESS.matcher(txtEmail).matches() -> {
-                    val msg = "Invalid email address."
-                    toastMsg(msg)
+                    toastMsg("Invalid email address.")
                     setValidationFlag("InvalidEmailAddress")
                 }
                 !txtPwd.matches("(.*[A-Z].*)".toRegex()) -> {
-                    val msg = "Password must contain at least one capital letter."
-                    toastMsg(msg)
+                    toastMsg("Password must contain at least one capital letter.")
                     setValidationFlag("PasswordNoCapitalLetter")
                 }
                 else -> loginUser(txtEmail, txtPwd)
@@ -60,32 +59,30 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun initFirebaseAuth() {
-        auth = FirebaseAuth.getInstance()
-    }
-
     private fun loginUser(txtEmail: String, txtPwd: String) {
-        Log.d("LoginActivity", "Attempting to log in with email: $txtEmail")
-        if (!Patterns.EMAIL_ADDRESS.matcher(txtEmail).matches()) {
-            val msg = "Invalid email address."
-            toastMsg(msg)
-            setValidationFlag("InvalidEmailAddress")
-            return
-        }
-        auth.signInWithEmailAndPassword(txtEmail, txtPwd)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Log.d("LoginActivity", "signInWithEmail:success")
-                    val msg = "Login Successful"
-                    toastMsg(msg)
-                    setValidationFlag("LoginSuccessful")
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        db.collection("users").document(txtEmail)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val storedPassword = document.getString("password")
+                    if (storedPassword == txtPwd) {
+                        Use.setEmail(txtEmail)
+                        toastMsg("Login Successful")
+                        setValidationFlag("LoginSuccessful")
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    } else {
+                        toastMsg("The password or email address is incorrect.")
+                        setValidationFlag("LoginFailed")
+                    }
                 } else {
-                    Log.w("LoginActivity", "signInWithEmail:failure", task.exception)
-                    val msg = "The password or email address is incorrect."
-                    toastMsg(msg)
+                    toastMsg("The password or email address is incorrect.")
                     setValidationFlag("LoginFailed")
                 }
+            }
+            .addOnFailureListener {
+                toastMsg("Login failed. Please try again.")
+                setValidationFlag("LoginFailed")
             }
     }
 

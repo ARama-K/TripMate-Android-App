@@ -58,7 +58,7 @@ dependencies {
 //    implementation("com.google.android.material:material:1.8.0")
     implementation("com.google.firebase:firebase-firestore-ktx:23.0.0")
 //    implementation("com.google.android.gms:play-services-tasks:19.8.0")
-
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
     implementation("androidx.room:room-runtime:2.6.1")
     implementation(libs.play.services.tasks)
     implementation(libs.firebase.auth.ktx)
@@ -68,8 +68,9 @@ dependencies {
     implementation(libs.play.services.location)
     kapt("androidx.room:room-compiler:2.6.1")
 //    implementation(libs.firebase.firestore.ktx)
-    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
+    implementation(platform("com.google.firebase:firebase-bom:33.16.0"))
     implementation("com.google.firebase:firebase-analytics")
+
     implementation("com.firebaseui:firebase-ui-auth:8.0.1")
 
     implementation("com.google.android.gms:play-services-maps:18.0.2") // Google Maps SDK for Android

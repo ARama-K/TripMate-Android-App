@@ -49,5 +49,12 @@ interface DiaryDao {
 
     @Query("SELECT updated FROM diary_entries WHERE id = :diaryId")
     fun getUpdated(diaryId: Int): Boolean
+
+    @Query("SELECT * FROM diary_entries WHERE user_email = :email")
+    fun getAllDiariesForUser(email: String): LiveData<List<DiaryEntry>>
+
+    @Query("SELECT * FROM diary_entries WHERE id = :diaryId AND user_email = :email")
+    fun findDiaryByIdForUser(diaryId: Int, email: String): DiaryEntry?
+
 }
 

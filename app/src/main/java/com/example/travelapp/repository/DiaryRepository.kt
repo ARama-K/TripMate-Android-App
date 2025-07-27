@@ -10,9 +10,12 @@ class DiaryRepository(application: Application) {
     private val diaryDao: DiaryDao = DiaryDatabase.getInstance(application)!!.diaryDao()
     val allDiary: LiveData<List<DiaryEntry>> = diaryDao.all
 
-    fun insert(diary: DiaryEntry): Int {
-        return diaryDao.insert(diary).toInt()
+    suspend fun insert(diaryEntry: DiaryEntry): Int {
+        val id = diaryDao.insert(diaryEntry).toInt()
+        diaryEntry.id = id
+        return id
     }
+
 
     val allId: LiveData<List<Int>>
         get() = diaryDao.id
@@ -40,4 +43,13 @@ class DiaryRepository(application: Application) {
     fun getUpdated(diaryId: Int): Boolean {
         return diaryDao.getUpdated(diaryId)
     }
+
+    fun getAllDiariesForUser(email: String): LiveData<List<DiaryEntry>> {
+        return diaryDao.getAllDiariesForUser(email)
+    }
+
+    fun findDiaryByIdForUser(diaryId: Int, email: String): DiaryEntry? {
+        return diaryDao.findDiaryByIdForUser(diaryId, email)
+    }
+
 }

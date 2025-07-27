@@ -1,14 +1,17 @@
 package com.example.travelapp.User1
 
 object Use {
-    var email: String = ""
-        private set
+    private var email: String = ""
 
     fun setEmail(email: String) {
-        Use.email = email
+        this.email = email
     }
 
     fun getUserEmail(): String {
         return email
+    }
+
+    fun isUserEmailSet(): Boolean {
+        return email.isNotBlank()
     }
 }

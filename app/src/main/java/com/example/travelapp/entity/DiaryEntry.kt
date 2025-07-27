@@ -9,6 +9,9 @@ class DiaryEntry {
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null
 
+    @ColumnInfo(name = "user_email")
+    var userEmail: String = "" // ✅ NEW FIELD
+
     @ColumnInfo(name = "title")
     var title: String? = null
 
@@ -30,19 +33,20 @@ class DiaryEntry {
     @ColumnInfo(name = "rating")
     var rating: Int = 0
 
-
     @ColumnInfo(name = "updated")
     var updated: Boolean = false
 
     constructor(
+        userEmail: String, // ✅ Add this to constructor
         title: String?,
         date: String?,
         description: String?,
         weather: String?,
         location: String?,
         fee: Int,
-        rating: Int,
+        rating: Int
     ) {
+        this.userEmail = userEmail
         this.title = title
         this.date = date
         this.description = description
@@ -52,5 +56,4 @@ class DiaryEntry {
         this.rating = rating
         this.updated = false
     }
-
 }

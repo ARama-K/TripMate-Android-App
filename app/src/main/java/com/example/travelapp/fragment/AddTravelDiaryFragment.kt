@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.travelapp.R
 import com.example.travelapp.SelectMapActivity
+import com.example.travelapp.User1.Use
 import com.example.travelapp.databinding.AddTravelDiaryFragmentBinding
 import com.example.travelapp.entity.DiaryEntry
 import com.example.travelapp.viewmodel.DiaryViewModel
@@ -183,7 +184,8 @@ class AddTravelDiaryFragment : Fragment() {
             weather = weather,
             location = location,
             fee = expense,
-            rating = satisfaction
+            rating = satisfaction,
+            userEmail = Use.getUserEmail() ?: ""
         )
         diaryViewModel!!.insert(newDiary)
         toastMsg("Add successful")
