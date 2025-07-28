@@ -177,7 +177,10 @@ class AddTravelDiaryFragment : Fragment() {
         val sdf = SimpleDateFormat("MM/dd/yyyy")
         val dateString = sdf.format(date)
 
+        val imageUrl = "https://source.unsplash.com/600x400/?$location,travel" // or any logic you prefer
+
         val newDiary = DiaryEntry(
+            userEmail = Use.getUserEmail() ?: "",
             title = title,
             date = dateString,
             description = description,
@@ -185,8 +188,9 @@ class AddTravelDiaryFragment : Fragment() {
             location = location,
             fee = expense,
             rating = satisfaction,
-            userEmail = Use.getUserEmail() ?: ""
+            imageUrl = imageUrl
         )
+
         diaryViewModel!!.insert(newDiary)
         toastMsg("Add successful")
 

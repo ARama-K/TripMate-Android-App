@@ -9,7 +9,7 @@ import com.example.travelapp.dao.DiaryDao
 import com.example.travelapp.entity.DiaryEntry
 import java.util.concurrent.Executors
 
-@Database(entities = [DiaryEntry::class], version = 1, exportSchema = false)
+@Database(entities = [DiaryEntry::class], version = 2, exportSchema = false)
 abstract class DiaryDatabase : RoomDatabase() {
     abstract fun diaryDao(): DiaryDao
 

@@ -17,15 +17,21 @@ class DiaryViewModel(application: Application) : AndroidViewModel(application) {
     var allDiary: LiveData<List<DiaryEntry>> = dRepository.allDiary
 
     fun insert(diaryEntry: DiaryEntry) = viewModelScope.launch {
+        // Assign an online image based on location
+        if (diaryEntry.imageUrl.isNullOrEmpty()) {
+            val query = diaryEntry.location?.takeIf { it.isNotBlank() } ?: "travel"
+            diaryEntry.imageUrl = "https://source.unsplash.com/600x400/?$query"
+        }
+
         val id = dRepository.insert(diaryEntry)
         diaryEntry.id = id
-        val email = Use.getUserEmail() ?: return@launch
         firedb.collection("users")
-            .document(email)
+            .document(Use.getUserEmail() ?: "")
             .collection("diary_entries")
             .document(id.toString())
             .set(diaryEntry)
     }
+
 
     val allId: LiveData<List<Int>>
         get() = dRepository.allId

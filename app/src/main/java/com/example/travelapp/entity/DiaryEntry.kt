@@ -6,11 +6,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "diary_entries")
 class DiaryEntry {
+
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null
 
     @ColumnInfo(name = "user_email")
-    var userEmail: String = "" // ✅ NEW FIELD
+    var userEmail: String = ""
 
     @ColumnInfo(name = "title")
     var title: String? = null
@@ -36,15 +37,24 @@ class DiaryEntry {
     @ColumnInfo(name = "updated")
     var updated: Boolean = false
 
+    @ColumnInfo(name = "image_url")
+    var imageUrl: String? = null
+
+
+    // ✅ Required no-arg constructor for Firestore
+    constructor()
+
     constructor(
-        userEmail: String, // ✅ Add this to constructor
+        userEmail: String,
         title: String?,
         date: String?,
         description: String?,
         weather: String?,
         location: String?,
         fee: Int,
-        rating: Int
+        rating: Int,
+        imageUrl: String? // <-- add this
+
     ) {
         this.userEmail = userEmail
         this.title = title
@@ -55,5 +65,7 @@ class DiaryEntry {
         this.fee = fee
         this.rating = rating
         this.updated = false
+        this.imageUrl = imageUrl // Add this
+
     }
 }

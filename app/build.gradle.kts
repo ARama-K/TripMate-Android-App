@@ -45,6 +45,7 @@ android {
 }
 
 dependencies {
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -54,8 +55,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.2")
-
-//    implementation("com.google.android.material:material:1.8.0")
+    implementation("com.google.android.material:material:1.12.0")
     implementation("com.google.firebase:firebase-firestore-ktx:23.0.0")
 //    implementation("com.google.android.gms:play-services-tasks:19.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
@@ -103,4 +103,9 @@ dependencies {
 
     // Firebase Auth dependency
     implementation("com.google.firebase:firebase-auth:21.0.8")
+    implementation("androidx.cardview:cardview:1.0.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }
